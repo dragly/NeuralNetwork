@@ -4,3 +4,8 @@ PhysicsSimulatorAbstract::PhysicsSimulatorAbstract(QObject *parent) :
     QObject(parent)
 {
 }
+
+
+void PhysicsSimulatorAbstract::reset() {
+
+}

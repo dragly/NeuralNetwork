@@ -28,11 +28,15 @@ void BinaryNode::reset() {
     }
 }
 
-bool BinaryNode::state() {
-    return _state;
-}
+bool BinaryNode::addConnection(BinaryNode* node) {
 
-void BinaryNode::addConnection(BinaryNode* node) {
+    //check if the connection already exists
+    for (int i=0;i < numChildren;i++) {
+        if (children[i] == node)
+            return false;
+    }
+
+    //add the connection
     numChildren++;
     BinaryNode** temp = new BinaryNode*[numChildren];
     if (numChildren > 1) {
@@ -43,17 +47,20 @@ void BinaryNode::addConnection(BinaryNode* node) {
     }
     children=temp;
     children[numChildren-1]=node;
+
+    return true;
 }
 
 bool BinaryNode::removeConnection(int index) {
-    index %= numChildren; //it's able to accept any random positive integer
-    children[index]= 0;
+
+    index %= numChildren+1; //it's able to accept any random positive integer
 
     if (numChildren < 1)
         return false;
     else if (numChildren == 1) {
         delete [] children;
         children = 0;
+        numChildren=0;
     } else {
         numChildren--;
         BinaryNode** temp = new BinaryNode*[numChildren];
@@ -68,6 +75,42 @@ bool BinaryNode::removeConnection(int index) {
         children=temp;
     }
     return true;
+}
+
+bool BinaryNode::state() {
+    return _state;
+}
+
+int BinaryNode::getNumChildren() {
+    return numChildren;
+}
+
+BinaryNode** BinaryNode::getChildren(){
+    return children;
+}
+
+void BinaryNode::Copy(BinaryNode* node) {
+
+    if (numChildren > 0) {
+        delete [] children;
+        children = 0;
+    }
+
+    //add the vars
+    _state = node->state();
+    numChildren = node->getNumChildren();
+    children = node->getChildren();
+
+    if (numChildren == 0)
+        return;
+
+    //add the connections
+    BinaryNode** temp = new BinaryNode*[numChildren];
+
+    for (int i=0;i<(numChildren-1);i++) {
+        temp[i]=children[i];
+    }
+    children=temp;
 }
 
 

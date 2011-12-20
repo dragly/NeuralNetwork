@@ -20,19 +20,60 @@ Teacher::Teacher(QObject *parent) :
     connect(timer, SIGNAL(timeout()), SLOT(advanceVisualization()));
 }
 
-void Teacher::advanceVisualization() {
-    neuralNetworkParams = neuralNetwork->parameters();
-    bool okay = physicsSimulator->advance(neuralNetworkParams);
-    delete [] neuralNetworkParams;
-
-    if (!okay) {
-        timer->stop();
-        return;
-    }
-
+int Teacher::step() {
     physicsSimulatorParams = physicsSimulator->parameters();
     neuralNetwork->advance(physicsSimulatorParams);
     delete [] physicsSimulatorParams;
+
+    neuralNetworkParams = neuralNetwork->parameters();
+    int time = physicsSimulator->advance(neuralNetworkParams);
+    delete [] neuralNetworkParams;
+
+    return time;
+}
+
+void Teacher::teach() {
+    int oldTime = 0;
+    qDebug("test");
+    physicsSimulator->reset();
+
+    for (int i=0;i< numCycles;i++) {
+
+        int time = -1;
+        while (time<0) {
+            time = step();
+        }
+
+        if (time > 75000) { //The number shouldn't be set by the simulator.
+            qDebug("Success");
+            break;
+        }
+
+        if (time >= oldTime) {
+            oldTime=time;
+            neuralNetwork->Evolve();
+        } else {
+            neuralNetwork->revertEvolve();
+            neuralNetwork->Evolve();
+        }
+        continue;
+    }
+
+}
+
+
+void Teacher::setCycles(int _cycles) {
+    numCycles = _cycles;
+}
+
+void Teacher::advanceVisualization() {
+
+   int time = step();
+
+    if (time > 0) {
+        timer->stop();
+        return;
+    }
 }
 
 void Teacher::visualize() {

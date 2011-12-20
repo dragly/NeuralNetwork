@@ -14,6 +14,12 @@ public:
     void advance(double *parameters);
     double * parameters();
 
+    void Evolve();
+    void revertEvolve();
+
+    bool addConnection(int fromIndex, int toIndex);
+    bool removeConnection(int fromIndex, int number);
+
 private:
     BinaryInputHandler** inputHandlers;
     int numInputs;
@@ -23,6 +29,8 @@ private:
     double* outputs; //should be abstracted
 
     std::vector<BinaryNode*> nodes; //order: inputs, outputs, all other nodes
+    BinaryNode backupNode;
+    int backUpIndex;
 };
 
 #endif // BINARYNETWORK1_H

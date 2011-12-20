@@ -13,11 +13,15 @@ public:
     NeuralNetworkAbstract *neuralNetwork;
 
     void visualize();
+    int step();
+    void teach();
+    void setCycles(int _cycles);
 
 public slots:
     void advanceVisualization();
 
 private:
+    int numCycles;
     QTimer *timer;
     double *neuralNetworkParams;
     double *physicsSimulatorParams;

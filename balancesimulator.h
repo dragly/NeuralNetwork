@@ -9,13 +9,15 @@ Q_OBJECT
 public:
     BalanceSimulator(QObject *parent);
     double *parameters();
-    bool advance(double *parameters);
+    int advance(double *parameters);
+    void reset();
 private:
     QGraphicsScene *simulatorScene;
     QGraphicsItem *line;
     QTimer *timer;
     double lineAngularVelocity;
 
+    int counter;
 };
 
 #endif // BALANCESIMULATOR_H

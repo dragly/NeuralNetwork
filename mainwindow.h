@@ -19,6 +19,10 @@ private slots:
 
     void on_visualizeButton_clicked();
 
+    void on_spinBox_valueChanged(int arg1);
+
+    void on_pushButton_2_clicked();
+
 private:
     Ui::MainWindow *ui;
     Teacher *teacher;

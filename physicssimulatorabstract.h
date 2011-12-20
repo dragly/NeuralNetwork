@@ -11,7 +11,8 @@ public:
     QGraphicsView *simulatorView;
     virtual void simulate() {}
     virtual double *parameters() { return NULL; }
-    virtual bool advance(double *parameters) { return false; }
+    virtual int advance(double *parameters) { return false; }
+    void reset();
 };
 
 #endif // PHYSICSSIMULATORABSTRACT_H

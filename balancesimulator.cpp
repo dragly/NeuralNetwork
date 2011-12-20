@@ -8,10 +8,16 @@ BalanceSimulator::BalanceSimulator(QObject *parent) : PhysicsSimulatorAbstract(p
     simulatorScene = new QGraphicsScene();
     simulatorView->setScene(simulatorScene);
     line = simulatorScene->addLine(0,0,0,40);
-    line->setRotation(190);
+    this->reset();
 }
 
-bool BalanceSimulator::advance(double *parameters) {
+void BalanceSimulator::reset() {
+    line->setRotation(190);
+    counter = 0;
+    lineAngularVelocity = 0;
+}
+
+int BalanceSimulator::advance(double *parameters) {
     double rotation = M_PI * line->rotation() / 180.0;
     double torque = -sin(rotation);
     if(parameters[0] > 0.0) {
@@ -30,10 +36,16 @@ bool BalanceSimulator::advance(double *parameters) {
     if(realRotation < -M_PI) {
         realRotation += 2*M_PI;
     }
+
+    counter++;
+
+    if (counter > 100000) //don't crash
+        return 100000;
+
     if(-M_PI / 2 < realRotation && realRotation < M_PI / 2) {
-        return false;
+        return counter;
     } else {
-        return true;
+        return -1;
     }
 }
 

@@ -59,6 +59,49 @@ double* BinaryNetwork1::parameters() {
    return params;
 }
 
+void BinaryNetwork1::revertEvolve() {
+
+    qDebug(":)");
+    backupNode.Copy(nodes.at(backUpIndex));
+}
+
+void BinaryNetwork1::Evolve() {
+
+    //one change at a time for now..:O)
+    bool success=false;
+    while (!success) {
+        int rn1 = rand()%2;
+        if (rn1==0) {  //add connection
+            int rn2 = rand()%nodes.size();
+            int rn3 = rand()%nodes.size();
+            success=addConnection(rn2,rn3);
+        } else { //remove connection
+            int rn2 = rand()%nodes.size();
+            int rn3 = rand();
+            success=removeConnection(rn2,rn3);
+        }
+    }
+}
+
+bool BinaryNetwork1::addConnection(int fromIndex, int toIndex) {
+
+    if (fromIndex == toIndex)
+        return false;
+
+    backUpIndex=fromIndex;
+    backupNode.Copy(nodes.at(fromIndex));
+
+    return nodes.at(fromIndex)->addConnection(nodes.at(toIndex));
+}
+
+bool BinaryNetwork1::removeConnection(int fromIndex, int number) {
+
+    backUpIndex=fromIndex;
+    backupNode.Copy(nodes.at(fromIndex));
+
+    return nodes.at(fromIndex)->removeConnection(number);
+}
+
 //add connection
 
 //add node

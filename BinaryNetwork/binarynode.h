@@ -10,9 +10,12 @@ public:
     virtual void reset(); //Reset the state of all nodes..
 
     bool removeConnection(int index);
-    void addConnection(BinaryNode* node);
+    bool addConnection(BinaryNode* node);
 
     bool state();
+    int getNumChildren();
+    BinaryNode** getChildren();
+    void Copy(BinaryNode* node);
 
 private:
     bool _state; //Needed to avoid recursive loops

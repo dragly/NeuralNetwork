@@ -21,3 +21,13 @@ void MainWindow::on_visualizeButton_clicked()
 {
     teacher->visualize();
 }
+
+void MainWindow::on_spinBox_valueChanged(int arg1)
+{
+    teacher->setCycles(arg1);
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    teacher->teach();
+}
