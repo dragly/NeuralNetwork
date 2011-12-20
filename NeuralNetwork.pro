@@ -18,7 +18,10 @@ SOURCES += main.cpp\
     switchboard.cpp \
     balancesimulator.cpp \
     keyboardinputnetwork.cpp \
-    geniousnetwork.cpp
+    geniousnetwork.cpp \
+    BinaryNetwork/binarynode.cpp \
+    BinaryNetwork/binarynetwork1.cpp \
+    BinaryNetwork/binaryinputhandler.cpp
 
 HEADERS  += mainwindow.h \
     teacher.h \
@@ -27,7 +30,10 @@ HEADERS  += mainwindow.h \
     switchboard.h \
     balancesimulator.h \
     keyboardinputnetwork.h \
-    geniousnetwork.h
+    geniousnetwork.h \
+    BinaryNetwork/binarynode.h \
+    BinaryNetwork/binarynetwork1.h \
+    BinaryNetwork/binaryinputhandler.h
 
 FORMS    += mainwindow.ui
 
