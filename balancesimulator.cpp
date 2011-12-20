@@ -38,16 +38,15 @@ bool BalanceSimulator::advance(double *parameters) {
 }
 
 double *BalanceSimulator::parameters() {
-    double rotation = M_PI * line->rotation() / 180.0;
-    double realRotation = fmod(rotation, 2 * M_PI);
-    if(realRotation > M_PI) {
-        realRotation -= 2*M_PI;
+    double rotation = line->rotation() * (1.0/360.0); // M_PI * line->rotation() / 180.0;
+    rotation+=0.5;
+    double realRotation = fmod(rotation, 1.0);
+
+    if(realRotation < 0) {
+        realRotation += 1.0;
     }
-    if(realRotation < -M_PI) {
-        realRotation += 2*M_PI;
-    }
-    double normalized = (realRotation + M_PI) / (2 * M_PI);
+
     double *params = new double[1];
-    params[0] = normalized;
+    params[0] = realRotation;
     return params;
 }
