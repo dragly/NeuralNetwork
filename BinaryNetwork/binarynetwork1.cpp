@@ -43,7 +43,7 @@ void BinaryNetwork1::advance(double *parameters)
 
     //read the state of the output nodes
     for (int i = 0; i < numOutputs;i++) {
-        outputs[i] = (nodes.at(numInputs+i)->state())? 1.0 : 0.0;
+        outputs[i] = (nodes.at(numInputHandlers+i)->state())? 1.0 : 0.0;
     }
     //turn off the power
     for (int i = 0; i < numInputs;i++)
