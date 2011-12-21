@@ -8,11 +8,16 @@ BalanceSimulator::BalanceSimulator(QObject *parent) : PhysicsSimulatorAbstract(p
     simulatorScene = new QGraphicsScene();
     simulatorView->setScene(simulatorScene);
     line = simulatorScene->addLine(0,0,0,40);
+    simulatorScene->addLine(-100,0,100,0);
     this->reset();
 }
 
 void BalanceSimulator::reset() {
-    rotation = M_PI * 190 / 180.0;
+    // Random start angle
+//    double offset = (double)rand()/(double)RAND_MAX;
+//    rotation = M_PI * (190 - 20*offset) / 180.0;
+    // Non-random start angle
+    rotation = M_PI * (190) / 180.0;
     counter = 0;
     lineAngularVelocity = 0;
     refreshView();

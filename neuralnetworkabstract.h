@@ -12,6 +12,7 @@ public:
     virtual void advance(double *parameters) {}
     virtual void revertEvolve();
     virtual void Evolve();
+    virtual void refreshView() {}
 };
 
 #endif // NEURALNETWORKABSTRACT_H

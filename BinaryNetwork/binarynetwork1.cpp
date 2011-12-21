@@ -24,6 +24,8 @@ BinaryNetwork1::BinaryNetwork1(int _numInputs, int _numOutputs, int _numInputHan
     for (int i=0;i<_numOutputs;i++) {
         nodes.push_back(new BinaryNode());
     }
+
+    this->resetView();
 }
 
 BinaryNetwork1::~BinaryNetwork1() {
@@ -35,8 +37,48 @@ BinaryNetwork1::~BinaryNetwork1() {
         delete nodes.back();
 }
 
+void BinaryNetwork1::resetView() {
+    for(int i = 0; i < sceneItems.length(); i++) {
+        QGraphicsItem *sceneItem = sceneItems.at(i);
+        networkScene->removeItem(sceneItem);
+    }
+    sceneItems.clear();
+    inputItems.clear();
+
+    for(int i = 0; i < numInputs + numOutputs; i++) {
+        QPen pen;
+        if(nodes.at(i)->state()) {
+            pen = QPen(QColor(Qt::green));
+        } else {
+            pen = QPen(QColor(Qt::red));
+        }
+        QGraphicsRectItem *item = networkScene->addRect(0,i*10,5,5, pen);
+        sceneItems.append(item);
+        inputItems.append(item);
+        qDebug() << "Appended item";
+    }
+}
+
+void BinaryNetwork1::refreshView() {
+    if(inputItems.length() != numInputs) {
+        qWarning() << "Wrong number of input items!";
+    }
+    for(int i = 0; i < numInputs + numOutputs; i++) {
+        qDebug() << nodes.at(i)->state();
+        if(nodes.at(i)->state()) {
+            inputItems.at(i)->setPen(QPen(QColor(Qt::green)));
+        } else {
+            inputItems.at(i)->setPen(QPen(QColor(Qt::red)));
+        }
+    }
+}
+
 void BinaryNetwork1::advance(double *parameters)
 {
+    //turn off the power
+    for (int i = 0; i < numInputs;i++)
+        for  (int j = 0; j < numInputHandlers;j++)
+            inputHandlers[j]->reset();
     //send a current trough our circuit
     for (int i = 0; i < numInputs;i++)
         for  (int j = 0; j < numInputHandlers;j++)
@@ -46,10 +88,6 @@ void BinaryNetwork1::advance(double *parameters)
     for (int i = 0; i < numOutputs;i++) {
         outputs[i] = (nodes.at(numInputHandlers+i)->state())? 1.0 : 0.0;
     }
-    //turn off the power
-    for (int i = 0; i < numInputs;i++)
-        for  (int j = 0; j < numInputHandlers;j++)
-            inputHandlers[j]->reset();
 }
 
 double* BinaryNetwork1::parameters() {

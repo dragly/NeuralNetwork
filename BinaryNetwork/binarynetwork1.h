@@ -16,6 +16,8 @@ public:
 
     void Evolve();
     void revertEvolve();
+    void refreshView();
+    void resetView();
 
     bool addConnection(int fromIndex, int toIndex);
     bool removeConnection(int fromIndex, int number);
@@ -32,6 +34,9 @@ private:
     BinaryNode backupNode;
     int backUpIndex;
     QGraphicsScene *networkScene;
+
+    QList<QGraphicsItem*> sceneItems;
+    QList<QGraphicsRectItem*> inputItems;
 };
 
 #endif // BINARYNETWORK1_H

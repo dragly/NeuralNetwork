@@ -10,7 +10,6 @@ Teacher::Teacher(QObject *parent) :
     physicsSimulator = new BalanceSimulator(this);
 
     //neuralNetwork = new GeniousNetwork();
-    this->reset();
 
     BinaryInputHandler** tmp = new BinaryInputHandler*[2];
     tmp[0]= new BinaryInputHandler(0,0.5,0.9);
@@ -19,6 +18,8 @@ Teacher::Teacher(QObject *parent) :
 
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), SLOT(advanceVisualization()));
+    // Reset everything
+    this->reset();
 }
 
 int Teacher::step() {
@@ -68,6 +69,7 @@ void Teacher::teach() {
 void Teacher::reset() {
     numberOfTrials = 0;
     physicsSimulator->reset();
+    timer->stop();
     //neuralNetwork->reset();
     qDebug() << "Neural Network reset not implemented!";
 }
@@ -81,6 +83,7 @@ void Teacher::advanceVisualization() {
 
     int time = step();
     physicsSimulator->refreshView();
+    neuralNetwork->refreshView();
 
     if (time > 0) {
         timer->stop();
