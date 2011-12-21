@@ -6,7 +6,8 @@ BinaryNetwork1::BinaryNetwork1(int _numInputs, int _numOutputs, int _numInputHan
     this->numOutputs = _numOutputs;
     this->numInputHandlers = _numInputHandlers;
 
-    networkView = new QGraphicsView();
+    networkScene = new QGraphicsScene();
+    networkView = new QGraphicsView(networkScene);
 
     this->inputHandlers = _inputHandlers;
     this->outputs = new double[numOutputs];

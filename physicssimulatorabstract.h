@@ -12,7 +12,7 @@ public:
     virtual void simulate() {}
     virtual double *parameters() { return NULL; }
     virtual int advance(double *parameters) { return false; }
-    void reset();
+    virtual void reset() {}
 };
 
 #endif // PHYSICSSIMULATORABSTRACT_H

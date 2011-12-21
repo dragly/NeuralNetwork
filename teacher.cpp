@@ -68,7 +68,7 @@ void Teacher::setCycles(int _cycles) {
 
 void Teacher::advanceVisualization() {
 
-   int time = step();
+    int time = step();
 
     if (time > 0) {
         timer->stop();
@@ -77,5 +77,6 @@ void Teacher::advanceVisualization() {
 }
 
 void Teacher::visualize() {
+    physicsSimulator->reset();
     timer->start(1);
 }

@@ -31,6 +31,7 @@ private:
     std::vector<BinaryNode*> nodes; //order: inputs, outputs, all other nodes
     BinaryNode backupNode;
     int backUpIndex;
+    QGraphicsScene *networkScene;
 };
 
 #endif // BINARYNETWORK1_H
