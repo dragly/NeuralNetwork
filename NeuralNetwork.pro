@@ -33,9 +33,11 @@ HEADERS  += mainwindow.h \
     geniousnetwork.h \
     BinaryNetwork/binarynode.h \
     BinaryNetwork/binarynetwork1.h \
-    BinaryNetwork/binaryinputhandler.h
+    BinaryNetwork/binaryinputhandler.h \
+    helpers.h
 
 FORMS    += mainwindow.ui
+
 
 
 

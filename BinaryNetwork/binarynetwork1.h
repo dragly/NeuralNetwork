@@ -42,6 +42,7 @@ private:
     QList<QGraphicsRectItem*> outputItems;
     // Connections
     QList<QGraphicsItem*> lineItems;
+    QList<QGraphicsItem*> lineEndItems;
 
     bool doReset;
 };
