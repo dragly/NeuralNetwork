@@ -30,13 +30,16 @@ private:
 
     double* outputs; //should be abstracted
 
-    std::vector<BinaryNode*> nodes; //order: inputs, outputs, all other nodes
+    QList<BinaryNode*> nodes; //order: inputs, outputs, all other nodes
+    QList<BinaryNode*> inputNodes; //order: inputs, outputs, all other nodes
+    QList<BinaryNode*> outputNodes; //order: inputs, outputs, all other nodes
     BinaryNode backupNode;
     int backUpIndex;
     QGraphicsScene *networkScene;
 
     QList<QGraphicsItem*> sceneItems;
     QList<QGraphicsRectItem*> inputItems;
+    QList<QGraphicsRectItem*> outputItems;
 };
 
 #endif // BINARYNETWORK1_H

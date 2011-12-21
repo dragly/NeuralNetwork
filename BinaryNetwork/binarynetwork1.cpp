@@ -18,11 +18,14 @@ BinaryNetwork1::BinaryNetwork1(int _numInputs, int _numOutputs, int _numInputHan
         BinaryNode* tmp = new BinaryNode();
         inputHandlers[i]->setConnectedNode(tmp);
         nodes.push_back(tmp);
+        inputNodes.push_back(tmp);
     }
 
     //add output nodes
     for (int i=0;i<_numOutputs;i++) {
-        nodes.push_back(new BinaryNode());
+        BinaryNode* tmp = new BinaryNode();
+        nodes.push_back(tmp);
+        outputNodes.push_back(tmp);
     }
 
     this->resetView();
@@ -45,7 +48,7 @@ void BinaryNetwork1::resetView() {
     sceneItems.clear();
     inputItems.clear();
 
-    for(int i = 0; i < numInputs + numOutputs; i++) {
+    for(int i = 0; i < numInputs; i++) {
         QPen pen;
         if(nodes.at(i)->state()) {
             pen = QPen(QColor(Qt::green));
@@ -57,18 +60,37 @@ void BinaryNetwork1::resetView() {
         inputItems.append(item);
         qDebug() << "Appended item";
     }
+
+    for(int i = 0; i < numOutputs; i++) {
+        QPen pen;
+        if(nodes.at(i)->state()) {
+            pen = QPen(QColor(Qt::green));
+        } else {
+            pen = QPen(QColor(Qt::red));
+        }
+        QGraphicsRectItem *item = networkScene->addRect(0,(numInputs)*10+i*10,5,5, pen);
+        sceneItems.append(item);
+        outputItems.append(item);
+        qDebug() << "Appended item";
+    }
 }
 
 void BinaryNetwork1::refreshView() {
     if(inputItems.length() != numInputs) {
         qWarning() << "Wrong number of input items!";
     }
-    for(int i = 0; i < numInputs + numOutputs; i++) {
-        qDebug() << nodes.at(i)->state();
+    for(int i = 0; i < numInputs; i++) {
         if(nodes.at(i)->state()) {
             inputItems.at(i)->setPen(QPen(QColor(Qt::green)));
         } else {
             inputItems.at(i)->setPen(QPen(QColor(Qt::red)));
+        }
+    }
+    for(int i = 0; i < numOutputs; i++) {
+        if(nodes.at(i)->state()) {
+            outputItems.at(i)->setPen(QPen(QColor(Qt::green)));
+        } else {
+            outputItems.at(i)->setPen(QPen(QColor(Qt::red)));
         }
     }
 }
