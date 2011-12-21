@@ -27,8 +27,8 @@ BinaryNetwork1::BinaryNetwork1(int _numInputs, int _numOutputs, int _numInputHan
         nodes.push_back(tmp);
         outputNodes.push_back(tmp);
     }
-
     this->resetView();
+
 }
 
 BinaryNetwork1::~BinaryNetwork1() {
@@ -48,14 +48,14 @@ void BinaryNetwork1::resetView() {
     sceneItems.clear();
     inputItems.clear();
 
-    for(int i = 0; i < numInputs; i++) {
+    for(int i = 0; i < numInputHandlers; i++) {
         QPen pen;
         if(nodes.at(i)->state()) {
             pen = QPen(QColor(Qt::green));
         } else {
             pen = QPen(QColor(Qt::red));
         }
-        QGraphicsRectItem *item = networkScene->addRect(0,i*10,5,5, pen);
+        QGraphicsRectItem *item = networkScene->addRect(i*10,0,5,5, pen);
         sceneItems.append(item);
         inputItems.append(item);
         qDebug() << "Appended item";
@@ -68,7 +68,7 @@ void BinaryNetwork1::resetView() {
         } else {
             pen = QPen(QColor(Qt::red));
         }
-        QGraphicsRectItem *item = networkScene->addRect(0,(numInputs)*10+i*10,5,5, pen);
+        QGraphicsRectItem *item = networkScene->addRect(i*10,20,5,5, pen);
         sceneItems.append(item);
         outputItems.append(item);
         qDebug() << "Appended item";
@@ -76,10 +76,10 @@ void BinaryNetwork1::resetView() {
 }
 
 void BinaryNetwork1::refreshView() {
-    if(inputItems.length() != numInputs) {
+    if(inputItems.length() != numInputHandlers) {
         qWarning() << "Wrong number of input items!";
     }
-    for(int i = 0; i < numInputs; i++) {
+    for(int i = 0; i < numInputHandlers; i++) {
         if(nodes.at(i)->state()) {
             inputItems.at(i)->setPen(QPen(QColor(Qt::green)));
         } else {
@@ -122,6 +122,7 @@ double* BinaryNetwork1::parameters() {
 
 void BinaryNetwork1::revertEvolve() {
     backupNode.Copy(nodes.at(backUpIndex));
+    this->resetView();
 }
 
 void BinaryNetwork1::Evolve() {
@@ -140,6 +141,7 @@ void BinaryNetwork1::Evolve() {
             success=removeConnection(rn2,rn3);
         }
     }
+    this->resetView();
 }
 
 bool BinaryNetwork1::addConnection(int fromIndex, int toIndex) {

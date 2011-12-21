@@ -18,10 +18,10 @@ public:
     int getNumChildren();
     void Copy(BinaryNode* node);
 
-    QList<BinaryNode *> getChildren();
+    QList<BinaryNode *> children();
 private:
     bool _state; //Needed to avoid recursive loops
-    QList<BinaryNode*> children;
+    QList<BinaryNode*> _children;
     int numChildren;
 };
 

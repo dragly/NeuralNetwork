@@ -11,8 +11,8 @@ void BinaryNode::set() {
 
     _state=true;
 
-    for (int i = 0; i < children.length();i++) {
-        children[i]->set();
+    for (int i = 0; i < _children.length();i++) {
+        _children[i]->set();
     }
 }
 
@@ -22,32 +22,32 @@ void BinaryNode::reset() {
 
     _state = false;
 
-    for (int i = 0; i < children.length();i++) {
-        children[i]->reset();
+    for (int i = 0; i < _children.length();i++) {
+        _children[i]->reset();
     }
 }
 
 bool BinaryNode::addConnection(BinaryNode* node) {
 
     //check if the connection already exists
-    if(children.contains(node)) {
+    if(_children.contains(node)) {
         return false;
     }
 
     //add the connection
-    children.append(node);
+    _children.append(node);
 
     return true;
 }
 
 bool BinaryNode::removeConnection(int index) {
 
-    index %= children.length()+1; //it's able to accept any random positive integer
+    index %= _children.length()+1; //it's able to accept any random positive integer
 
-    if (children.length() < 1) {
+    if (_children.length() < 1) {
         return false;
     } else {
-        children.removeAt(index);
+        _children.removeAt(index);
     }
     return true;
 }
@@ -57,18 +57,18 @@ bool BinaryNode::state() {
 }
 
 int BinaryNode::getNumChildren() {
-    return children.length();
+    return _children.length();
 }
 
-QList<BinaryNode*> BinaryNode::getChildren(){
-    return children;
+QList<BinaryNode*> BinaryNode::children(){
+    return _children;
 }
 
 void BinaryNode::Copy(BinaryNode* node) {
     //add the vars
     _state = node->state();
     // make a copy of the original node's children
-    children = QList<BinaryNode*>(node->getChildren());
+    _children = QList<BinaryNode*>(node->children());
 }
 
 
