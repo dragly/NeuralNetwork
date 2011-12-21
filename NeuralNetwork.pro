@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     geniousnetwork.cpp \
     BinaryNetwork/binarynode.cpp \
     BinaryNetwork/binarynetwork1.cpp \
-    BinaryNetwork/binaryinputhandler.cpp
+    BinaryNetwork/binaryinputhandler.cpp \
+    balancesimulator2.cpp
 
 HEADERS  += mainwindow.h \
     teacher.h \
@@ -34,7 +35,8 @@ HEADERS  += mainwindow.h \
     BinaryNetwork/binarynode.h \
     BinaryNetwork/binarynetwork1.h \
     BinaryNetwork/binaryinputhandler.h \
-    helpers.h
+    helpers.h \
+    balancesimulator2.h
 
 FORMS    += mainwindow.ui
 
