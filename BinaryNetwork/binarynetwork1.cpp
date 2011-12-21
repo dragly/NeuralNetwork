@@ -50,6 +50,8 @@ void BinaryNetwork1::resetView() {
     lineItems.clear();
     lineEndItems.clear();
 
+    double nodeSize = 20;
+
     for(int i = 0; i < numInputHandlers; i++) {
         QPen pen;
         BinaryNode* node = inputNodes.at(i);
@@ -58,7 +60,7 @@ void BinaryNetwork1::resetView() {
         } else {
             pen = QPen(QColor(Qt::red));
         }
-        QGraphicsRectItem *item = networkScene->addRect(i*20,0,10,10, pen);
+        QGraphicsRectItem *item = networkScene->addRect(i*2*nodeSize,0,nodeSize,nodeSize, pen);
         nodeItems.append(item);
         inputItems.append(item);
     }
@@ -70,7 +72,7 @@ void BinaryNetwork1::resetView() {
         } else {
             pen = QPen(QColor(Qt::red));
         }
-        QGraphicsRectItem *item = networkScene->addRect(i*20, 40,10,10, pen);
+        QGraphicsRectItem *item = networkScene->addRect(i*2*nodeSize, 4*nodeSize,nodeSize,nodeSize, pen);
         nodeItems.append(item);
         outputItems.append(item);
     }
@@ -78,24 +80,22 @@ void BinaryNetwork1::resetView() {
     for(int i = 0; i < numInputHandlers + numOutputs; i++) {
         QGraphicsRectItem *fromItem = nodeItems.at(i);
         for(int j = 0; j < nodes.at(i)->children().length(); j++) {
-            QColor randomColor;
-            // Create a random color
-            if(ran0() < 0.3) {
-                randomColor = QColor(200, 200, ran0()*255);
-            } else if(ran0() < 0.6) {
-                randomColor = QColor(200, ran0()*255, 200);
-            } else {
-                randomColor = QColor(ran0()*255, 200, 200);
+            Qt::GlobalColor colorIndex = Qt::white;
+            while(colorIndex == Qt::white || colorIndex == Qt::lightGray || colorIndex == Qt::yellow) { // avoid light colors
+                colorIndex = (Qt::GlobalColor)(ran0()*19); // pick one of the 19 predefined Qt colors
             }
+            QColor randomColor = QColor(colorIndex);
+            randomColor.setAlpha(100);
+            qDebug() << randomColor;
             BinaryNode *child = nodes.at(i)->children().at(j);
             QGraphicsRectItem *toItem = nodeItems.at(nodes.indexOf(child));
-            QGraphicsLineItem *lineItem = networkScene->addLine(fromItem->rect().x() + 5,
-                                                                fromItem->rect().y() + 5,
-                                                                toItem->rect().x() + 5,
-                                                                toItem->rect().y() + 5,
-                                                                QPen(randomColor));
-            QGraphicsEllipseItem *lineEndItem = networkScene->addEllipse(toItem->rect().x() + 5 - 1.25,toItem->rect().y() + 5 - 1.25,
-                                                                         2.5,2.5,QPen(randomColor), QBrush(randomColor));
+            QGraphicsLineItem *lineItem = networkScene->addLine(fromItem->rect().x() + nodeSize/2.,
+                                                                fromItem->rect().y() + nodeSize/2.,
+                                                                toItem->rect().x() + nodeSize/2.,
+                                                                toItem->rect().y() + nodeSize/2.,
+                                                                QPen(randomColor,2));
+            QGraphicsEllipseItem *lineEndItem = networkScene->addEllipse(toItem->rect().x() + nodeSize/2. - nodeSize/4.,toItem->rect().y() + nodeSize/2. - nodeSize/4.,
+                                                                         nodeSize/2.,nodeSize/2.,QPen(randomColor), QBrush(randomColor));
             lineItems.append(lineItem);
             lineEndItems.append(lineEndItem);
         }
