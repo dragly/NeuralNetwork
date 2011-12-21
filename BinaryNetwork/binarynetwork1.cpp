@@ -78,8 +78,15 @@ void BinaryNetwork1::resetView() {
     for(int i = 0; i < numInputHandlers + numOutputs; i++) {
         QGraphicsRectItem *fromItem = nodeItems.at(i);
         for(int j = 0; j < nodes.at(i)->children().length(); j++) {
+            QColor randomColor;
             // Create a random color
-            QColor randomColor = QColor(ran0()*255, ran0()*255, ran0()*255);
+            if(ran0() < 0.3) {
+                randomColor = QColor(200, 200, ran0()*255);
+            } else if(ran0() < 0.6) {
+                randomColor = QColor(200, ran0()*255, 200);
+            } else {
+                randomColor = QColor(ran0()*255, 200, 200);
+            }
             BinaryNode *child = nodes.at(i)->children().at(j);
             QGraphicsRectItem *toItem = nodeItems.at(nodes.indexOf(child));
             QGraphicsLineItem *lineItem = networkScene->addLine(fromItem->rect().x() + 5,
