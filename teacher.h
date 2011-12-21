@@ -27,6 +27,7 @@ private:
     double *neuralNetworkParams;
     double *physicsSimulatorParams;
     int numberOfTrials;
+    int oldTime;
 };
 
 #endif // TEACHER_H

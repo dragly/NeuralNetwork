@@ -20,10 +20,27 @@ void BalanceSimulator::reset() {
     rotation = M_PI * (190) / 180.0;
     counter = 0;
     lineAngularVelocity = 0;
+    firstRun=-1;
     refreshView();
 }
-
 int BalanceSimulator::advance(double *parameters) {
+    int time = advance2(parameters);
+    if (time<0)
+        return -1;
+    else if (firstRun==-1) {
+        reset();
+        rotation = M_PI * (170) / 180.0;
+        firstRun=time;
+        return -1;
+    } else {
+        time +=firstRun;
+        time /=2;
+        firstRun=-1;
+        return time;
+    }
+}
+
+int BalanceSimulator::advance2(double *parameters) {
     double torque = -sin(rotation);
     if(parameters[0] > 0.0) {
         torque -= 10.0;

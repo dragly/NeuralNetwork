@@ -19,6 +19,10 @@ public:
     void refreshView();
     void resetView();
 
+    void powerDownNodes();
+    void powerUpNodes(double *parameters);
+    void reset() { powerDownNodes(); }
+
     bool addConnection(int fromIndex, int toIndex);
     bool removeConnection(int fromIndex, int number);
 

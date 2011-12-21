@@ -127,16 +127,27 @@ void BinaryNetwork1::refreshView() {
     }
 }
 
-void BinaryNetwork1::advance(double *parameters)
-{
+void BinaryNetwork1::powerDownNodes() {
     //turn off the power
     for (int i = 0; i < numInputs;i++)
         for  (int j = 0; j < numInputHandlers;j++)
             inputHandlers[j]->reset();
+}
+
+void BinaryNetwork1::powerUpNodes(double*parameters) {
     //send a current trough our circuit
     for (int i = 0; i < numInputs;i++)
         for  (int j = 0; j < numInputHandlers;j++)
             inputHandlers[j]->execute(i,parameters[i]);
+}
+
+void BinaryNetwork1::advance(double *parameters)
+{
+    //turn off the power
+    powerDownNodes();
+
+    //send a current trough our circuit
+    powerUpNodes(parameters);
 
     //read the state of the output nodes
     for (int i = 0; i < numOutputs;i++) {
@@ -153,11 +164,14 @@ double* BinaryNetwork1::parameters() {
 }
 
 void BinaryNetwork1::revertEvolve() {
-    backupNode.Copy(nodes.at(backUpIndex));
+    powerDownNodes();
+
+    nodes.at(backUpIndex)->Copy(&backupNode);
     doReset = true; // Tell the visualizer to reset to show the new connections
 }
 
 void BinaryNetwork1::Evolve() {
+    powerDownNodes();
     //one change at a time for now..:O)
     bool success=false;
     while (!success) {

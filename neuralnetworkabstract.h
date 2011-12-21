@@ -13,6 +13,7 @@ public:
     virtual void revertEvolve();
     virtual void Evolve();
     virtual void refreshView() {}
+    virtual void reset() {}
 };
 
 #endif // NEURALNETWORKABSTRACT_H

@@ -10,6 +10,7 @@ public:
     BalanceSimulator(QObject *parent);
     double *parameters();
     int advance(double *parameters);
+    int advance2(double *parameters);
     void reset();
     void refreshView();
 private:
@@ -20,6 +21,8 @@ private:
     double rotation;
 
     int counter;
+
+    int firstRun; //one run at each side
 };
 
 #endif // BALANCESIMULATOR_H
