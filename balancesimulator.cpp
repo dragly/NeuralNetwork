@@ -58,15 +58,15 @@ void BalanceSimulator::refreshView() {
 }
 
 double *BalanceSimulator::parameters() {
-    double newRotation = rotation * (1.0/2 * M_PI); // M_PI * line->rotation() / 180.0;
-    newRotation+=0.5;
-    double realRotation = fmod(newRotation, 1.0);
+    double realRotation = fmod(rotation, 2 * M_PI);
+    double newRotation = realRotation /(2 * M_PI); // M_PI * line->rotation() / 180.0;
+    newRotation-=0.5;
 
-    if(realRotation < 0) {
-        realRotation += 1.0;
+    if(newRotation < 0) {
+        newRotation += 1.0;
     }
 
     double *params = new double[1];
-    params[0] = realRotation;
+    params[0] = newRotation;
     return params;
 }

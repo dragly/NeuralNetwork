@@ -47,10 +47,11 @@ void BinaryNetwork1::resetView() {
     }
     sceneItems.clear();
     inputItems.clear();
+    outputItems.clear();
 
     for(int i = 0; i < numInputHandlers; i++) {
         QPen pen;
-        if(nodes.at(i)->state()) {
+        if(inputNodes.at(i)->state()) {
             pen = QPen(QColor(Qt::green));
         } else {
             pen = QPen(QColor(Qt::red));
@@ -58,12 +59,11 @@ void BinaryNetwork1::resetView() {
         QGraphicsRectItem *item = networkScene->addRect(i*10,0,5,5, pen);
         sceneItems.append(item);
         inputItems.append(item);
-        qDebug() << "Appended item";
     }
 
     for(int i = 0; i < numOutputs; i++) {
         QPen pen;
-        if(nodes.at(i)->state()) {
+        if(outputNodes.at(i)->state()) {
             pen = QPen(QColor(Qt::green));
         } else {
             pen = QPen(QColor(Qt::red));
@@ -71,23 +71,26 @@ void BinaryNetwork1::resetView() {
         QGraphicsRectItem *item = networkScene->addRect(i*10,20,5,5, pen);
         sceneItems.append(item);
         outputItems.append(item);
-        qDebug() << "Appended item";
     }
+    doReset = false;
 }
 
 void BinaryNetwork1::refreshView() {
+    if(doReset) {
+        this->resetView();
+    }
     if(inputItems.length() != numInputHandlers) {
         qWarning() << "Wrong number of input items!";
     }
     for(int i = 0; i < numInputHandlers; i++) {
-        if(nodes.at(i)->state()) {
+        if(inputNodes.at(i)->state()) {
             inputItems.at(i)->setPen(QPen(QColor(Qt::green)));
         } else {
             inputItems.at(i)->setPen(QPen(QColor(Qt::red)));
         }
     }
     for(int i = 0; i < numOutputs; i++) {
-        if(nodes.at(i)->state()) {
+        if(outputNodes.at(i)->state()) {
             outputItems.at(i)->setPen(QPen(QColor(Qt::green)));
         } else {
             outputItems.at(i)->setPen(QPen(QColor(Qt::red)));
@@ -122,11 +125,10 @@ double* BinaryNetwork1::parameters() {
 
 void BinaryNetwork1::revertEvolve() {
     backupNode.Copy(nodes.at(backUpIndex));
-    this->resetView();
+    doReset = true; // Tell the visualizer to reset to show the new connections
 }
 
 void BinaryNetwork1::Evolve() {
-
     //one change at a time for now..:O)
     bool success=false;
     while (!success) {
@@ -141,7 +143,7 @@ void BinaryNetwork1::Evolve() {
             success=removeConnection(rn2,rn3);
         }
     }
-    this->resetView();
+    doReset = true; // Tell the visualizer to reset to show the new connections
 }
 
 bool BinaryNetwork1::addConnection(int fromIndex, int toIndex) {

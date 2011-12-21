@@ -40,6 +40,8 @@ private:
     QList<QGraphicsItem*> sceneItems;
     QList<QGraphicsRectItem*> inputItems;
     QList<QGraphicsRectItem*> outputItems;
+
+    bool doReset;
 };
 
 #endif // BINARYNETWORK1_H
