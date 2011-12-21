@@ -61,8 +61,6 @@ double* BinaryNetwork1::parameters() {
 }
 
 void BinaryNetwork1::revertEvolve() {
-
-    qDebug(":)");
     backupNode.Copy(nodes.at(backUpIndex));
 }
 

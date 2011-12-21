@@ -35,17 +35,18 @@ int Teacher::step() {
 void Teacher::teach() {
     int oldTime = 0;
     qDebug("test");
-    physicsSimulator->reset();
 
     for (int i=0;i< numCycles;i++) {
+        physicsSimulator->reset();
 
         int time = -1;
-        while (time<0) {
+        while (time < 0) {
             time = step();
         }
 
-        if (time > 75000) { //The number shouldn't be set by the simulator.
+        if (time > 750000) { //The number shouldn't be set by the simulator.
             qDebug("Success");
+            qDebug() << "Time was "<< time;
             break;
         }
 
@@ -58,7 +59,7 @@ void Teacher::teach() {
         }
         continue;
     }
-
+    physicsSimulator->refreshView();
 }
 
 void Teacher::reset() {
@@ -79,6 +80,7 @@ void Teacher::advanceVisualization() {
 
     if (time > 0) {
         timer->stop();
+        qDebug() << time;
         return;
     }
 }
