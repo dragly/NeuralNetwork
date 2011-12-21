@@ -12,13 +12,13 @@ BalanceSimulator::BalanceSimulator(QObject *parent) : PhysicsSimulatorAbstract(p
 }
 
 void BalanceSimulator::reset() {
-    line->setRotation(190);
+    rotation = M_PI * 190 / 180.0;
     counter = 0;
     lineAngularVelocity = 0;
+    refreshView();
 }
 
 int BalanceSimulator::advance(double *parameters) {
-    double rotation = M_PI * line->rotation() / 180.0;
     double torque = -sin(rotation);
     if(parameters[0] > 0.0) {
         torque -= 10.0;
@@ -28,7 +28,6 @@ int BalanceSimulator::advance(double *parameters) {
     }
     lineAngularVelocity = lineAngularVelocity + torque * 0.001;
     rotation = rotation + lineAngularVelocity * 0.001;
-    line->setRotation(rotation * 180 / M_PI);
     double realRotation = fmod(rotation, 2 * M_PI);
     if(realRotation > M_PI) {
         realRotation -= 2*M_PI;
@@ -49,10 +48,14 @@ int BalanceSimulator::advance(double *parameters) {
     }
 }
 
+void BalanceSimulator::refreshView() {
+    line->setRotation(rotation * 180 / M_PI);
+}
+
 double *BalanceSimulator::parameters() {
-    double rotation = line->rotation() * (1.0/360.0); // M_PI * line->rotation() / 180.0;
-    rotation+=0.5;
-    double realRotation = fmod(rotation, 1.0);
+    double newRotation = rotation * (1.0/2 * M_PI); // M_PI * line->rotation() / 180.0;
+    newRotation+=0.5;
+    double realRotation = fmod(newRotation, 1.0);
 
     if(realRotation < 0) {
         realRotation += 1.0;

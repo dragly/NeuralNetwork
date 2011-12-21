@@ -13,6 +13,10 @@ public:
     virtual double *parameters() { return NULL; }
     virtual int advance(double *parameters) { return false; }
     virtual void reset() {}
+    virtual void refreshView() {}
+
+private:
+
 };
 
 #endif // PHYSICSSIMULATORABSTRACT_H

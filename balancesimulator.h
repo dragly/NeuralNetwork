@@ -11,11 +11,13 @@ public:
     double *parameters();
     int advance(double *parameters);
     void reset();
+    void refreshView();
 private:
     QGraphicsScene *simulatorScene;
     QGraphicsItem *line;
     QTimer *timer;
     double lineAngularVelocity;
+    double rotation;
 
     int counter;
 };

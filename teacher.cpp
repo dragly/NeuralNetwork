@@ -61,6 +61,12 @@ void Teacher::teach() {
 
 }
 
+void Teacher::reset() {
+    physicsSimulator->reset();
+    //neuralNetwork->reset();
+    qDebug() << "Neural Network reset not implemented!";
+}
+
 
 void Teacher::setCycles(int _cycles) {
     numCycles = _cycles;
@@ -69,6 +75,7 @@ void Teacher::setCycles(int _cycles) {
 void Teacher::advanceVisualization() {
 
     int time = step();
+    physicsSimulator->refreshView();
 
     if (time > 0) {
         timer->stop();

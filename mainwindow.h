@@ -21,7 +21,9 @@ private slots:
 
     void on_spinBox_valueChanged(int arg1);
 
-    void on_pushButton_2_clicked();
+    void on_resetButton_clicked();
+
+    void on_continueButton_clicked();
 
 private:
     Ui::MainWindow *ui;

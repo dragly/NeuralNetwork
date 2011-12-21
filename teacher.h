@@ -16,6 +16,7 @@ public:
     int step();
     void teach();
     void setCycles(int _cycles);
+    void reset();
 
 public slots:
     void advanceVisualization();

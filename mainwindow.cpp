@@ -27,7 +27,12 @@ void MainWindow::on_spinBox_valueChanged(int arg1)
     teacher->setCycles(arg1);
 }
 
-void MainWindow::on_pushButton_2_clicked()
+void MainWindow::on_resetButton_clicked()
+{
+    teacher->reset();
+}
+
+void MainWindow::on_continueButton_clicked()
 {
     teacher->teach();
 }
