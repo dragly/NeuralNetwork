@@ -37,9 +37,11 @@ private:
     int backUpIndex;
     QGraphicsScene *networkScene;
 
-    QList<QGraphicsItem*> sceneItems;
+    QList<QGraphicsRectItem*> nodeItems;
     QList<QGraphicsRectItem*> inputItems;
     QList<QGraphicsRectItem*> outputItems;
+    // Connections
+    QList<QGraphicsItem*> lineItems;
 
     bool doReset;
 };

@@ -41,23 +41,23 @@ BinaryNetwork1::~BinaryNetwork1() {
 }
 
 void BinaryNetwork1::resetView() {
-    for(int i = 0; i < sceneItems.length(); i++) {
-        QGraphicsItem *sceneItem = sceneItems.at(i);
-        networkScene->removeItem(sceneItem);
-    }
-    sceneItems.clear();
+    networkScene->clear();
+
+    nodeItems.clear();
     inputItems.clear();
     outputItems.clear();
+    lineItems.clear();
 
     for(int i = 0; i < numInputHandlers; i++) {
         QPen pen;
-        if(inputNodes.at(i)->state()) {
+        BinaryNode* node = inputNodes.at(i);
+        if(node->state()) {
             pen = QPen(QColor(Qt::green));
         } else {
             pen = QPen(QColor(Qt::red));
         }
         QGraphicsRectItem *item = networkScene->addRect(i*10,0,5,5, pen);
-        sceneItems.append(item);
+        nodeItems.append(item);
         inputItems.append(item);
     }
 
@@ -69,9 +69,26 @@ void BinaryNetwork1::resetView() {
             pen = QPen(QColor(Qt::red));
         }
         QGraphicsRectItem *item = networkScene->addRect(i*10,20,5,5, pen);
-        sceneItems.append(item);
+        nodeItems.append(item);
         outputItems.append(item);
     }
+    // Add lines as connections
+    for(int i = 0; i < numInputHandlers + numOutputs; i++) {
+        QGraphicsRectItem *fromItem = nodeItems.at(i);
+        for(int j = 0; j < nodes.at(i)->children().length(); j++) {
+            BinaryNode *child = nodes.at(i)->children().at(j);
+            QGraphicsRectItem *toItem = nodeItems.at(nodes.indexOf(child));
+            qDebug() << "Connection from" << i << "to" << j;
+            qDebug() << "Positions" << fromItem->rect() << toItem->rect();
+            QGraphicsLineItem *lineItem = networkScene->addLine(fromItem->rect().x() + 2.5,
+                                                                fromItem->rect().y() + 2.5,
+                                                                toItem->rect().x() + 2.5,
+                                                                toItem->rect().y() + 2.5);
+            lineItems.append(lineItem);
+        }
+    }
+
+    // Make sure we don't reset this before necessary
     doReset = false;
 }
 

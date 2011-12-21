@@ -64,6 +64,7 @@ void Teacher::teach() {
         continue;
     }
     physicsSimulator->refreshView();
+    neuralNetwork->refreshView();
 }
 
 void Teacher::reset() {
