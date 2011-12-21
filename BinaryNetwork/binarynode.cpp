@@ -65,7 +65,7 @@ bool BinaryNode::removeConnection(int index) {
         numChildren--;
         BinaryNode** temp = new BinaryNode*[numChildren];
         int j=0;
-        for (int i=0;i<(numChildren-1);i++) {
+        for (int i=0;i<numChildren+1;i++) {
             if (i != index) {
                 temp[j]=children[i];
                 j++;
