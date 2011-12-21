@@ -1,6 +1,8 @@
 #ifndef BINARYNODE_H
 #define BINARYNODE_H
 
+#include <QList>
+
 class BinaryNode
 {
 public:
@@ -14,12 +16,12 @@ public:
 
     bool state();
     int getNumChildren();
-    BinaryNode** getChildren();
     void Copy(BinaryNode* node);
 
+    QList<BinaryNode *> getChildren();
 private:
     bool _state; //Needed to avoid recursive loops
-    BinaryNode** children;
+    QList<BinaryNode*> children;
     int numChildren;
 };
 

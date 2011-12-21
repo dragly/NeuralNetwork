@@ -3,7 +3,7 @@
 
 int main(int argc, char *argv[])
 {
-    srand(1000);
+    srand(time(NULL));
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
