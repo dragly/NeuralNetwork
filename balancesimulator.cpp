@@ -38,8 +38,8 @@ int BalanceSimulator::advance(double *parameters) {
 
     counter++;
 
-    if (counter > 1000000) //don't crash
-        return 1000000;
+    if (counter > 100000) //don't crash
+        return 100000;
 
     if(-M_PI / 2 < realRotation && realRotation < M_PI / 2) {
         return counter;

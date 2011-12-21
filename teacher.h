@@ -26,6 +26,7 @@ private:
     QTimer *timer;
     double *neuralNetworkParams;
     double *physicsSimulatorParams;
+    int numberOfTrials;
 };
 
 #endif // TEACHER_H

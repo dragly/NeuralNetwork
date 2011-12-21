@@ -10,6 +10,7 @@ Teacher::Teacher(QObject *parent) :
     physicsSimulator = new BalanceSimulator(this);
 
     //neuralNetwork = new GeniousNetwork();
+    this->reset();
 
     BinaryInputHandler** tmp = new BinaryInputHandler*[2];
     tmp[0]= new BinaryInputHandler(0,0.5,0.9);
@@ -37,6 +38,7 @@ void Teacher::teach() {
     qDebug("test");
 
     for (int i=0;i< numCycles;i++) {
+        numberOfTrials++;
         physicsSimulator->reset();
 
         int time = -1;
@@ -44,9 +46,10 @@ void Teacher::teach() {
             time = step();
         }
 
-        if (time > 750000) { //The number shouldn't be set by the simulator.
+        if (time > 75000) { //The number shouldn't be set by the simulator.
             qDebug("Success");
-            qDebug() << "Time was "<< time;
+            qDebug() << "Number of trials was" << numberOfTrials;
+            qDebug() << "Time was"<< time;
             break;
         }
 
@@ -63,6 +66,7 @@ void Teacher::teach() {
 }
 
 void Teacher::reset() {
+    numberOfTrials = 0;
     physicsSimulator->reset();
     //neuralNetwork->reset();
     qDebug() << "Neural Network reset not implemented!";

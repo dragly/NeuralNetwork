@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
     teacher = new Teacher();
     ui->visualLayout->addWidget(teacher->physicsSimulator->simulatorView);
     ui->visualLayout->addWidget(teacher->neuralNetwork->networkView);
+    ui->spinBox->setValue(1000);
 }
 
 MainWindow::~MainWindow()
