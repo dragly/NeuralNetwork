@@ -9,6 +9,7 @@ BinaryNetwork1::BinaryNetwork1(int _numInputs, int _numOutputs, int _numInputHan
 
     networkScene = new QGraphicsScene();
     networkView = new QGraphicsView(networkScene);
+    networkView->setRenderHints(QPainter::HighQualityAntialiasing);
 
     this->inputHandlers = _inputHandlers;
     this->outputs = new double[numOutputs];
@@ -45,10 +46,6 @@ void BinaryNetwork1::resetView() {
     networkScene->clear();
 
     nodeItems.clear();
-    inputItems.clear();
-    outputItems.clear();
-    lineItems.clear();
-    lineEndItems.clear();
 
     double nodeSize = 20;
 
@@ -62,7 +59,6 @@ void BinaryNetwork1::resetView() {
         }
         QGraphicsRectItem *item = networkScene->addRect(i*2*nodeSize,0,nodeSize,nodeSize, pen);
         nodeItems.append(item);
-        inputItems.append(item);
     }
 
     for(int i = 0; i < numOutputs; i++) {
@@ -74,29 +70,43 @@ void BinaryNetwork1::resetView() {
         }
         QGraphicsRectItem *item = networkScene->addRect(i*2*nodeSize, 4*nodeSize,nodeSize,nodeSize, pen);
         nodeItems.append(item);
-        outputItems.append(item);
     }
     // Add lines as connections
     for(int i = 0; i < numInputHandlers + numOutputs; i++) {
         QGraphicsRectItem *fromItem = nodeItems.at(i);
         for(int j = 0; j < nodes.at(i)->children().length(); j++) {
-            Qt::GlobalColor colorIndex = Qt::white;
-            while(colorIndex == Qt::white || colorIndex == Qt::lightGray || colorIndex == Qt::yellow) { // avoid light colors
-                colorIndex = (Qt::GlobalColor)(ran0()*19); // pick one of the 19 predefined Qt colors
+            Qt::GlobalColor colorIndex = Qt::black;
+            //            Qt::GlobalColor colorIndex = Qt::white;
+            //            while(colorIndex == Qt::white || colorIndex == Qt::lightGray || colorIndex == Qt::yellow || colorIndex == Qt::gray || colorIndex == Qt::cyan) { // avoid light colors
+            //                colorIndex = (Qt::GlobalColor)(ran0()*19); // pick one of the 19 predefined Qt colors
+            //            }
+            QColor randomColor;
+            if(nodes.at(i)->state()) {
+                randomColor = QColor(Qt::green);
+            } else {
+                randomColor = QColor(Qt::red);
             }
-            QColor randomColor = QColor(colorIndex);
             randomColor.setAlpha(100);
             BinaryNode *child = nodes.at(i)->children().at(j);
             QGraphicsRectItem *toItem = nodeItems.at(nodes.indexOf(child));
-            QGraphicsLineItem *lineItem = networkScene->addLine(fromItem->rect().x() + nodeSize/2.,
-                                                                fromItem->rect().y() + nodeSize/2.,
-                                                                toItem->rect().x() + nodeSize/2.,
-                                                                toItem->rect().y() + nodeSize/2.,
-                                                                QPen(randomColor,2));
+            QPointF startPoint(fromItem->rect().x() + nodeSize/2.,
+                               fromItem->rect().y() + nodeSize/2.);
+            QPointF endPoint(toItem->rect().x() + nodeSize/2.,
+                             toItem->rect().y() + nodeSize/2.);
+            QPointF midVector = (endPoint - startPoint);
+            QPointF midPoint1 = (midVector) / 3. + startPoint + QPointF(-midVector.y(), midVector.x()) / 2.;
+            QPointF midPoint2 = (midVector) * 2. / 3. + startPoint + QPointF(-midVector.y(), midVector.x()) / 2.;
+            //            qDebug() << startPoint << endPoint << midPoint;
+            QPainterPath myPath(startPoint);
+            myPath.cubicTo(midPoint1, midPoint2, endPoint);
+            QGraphicsPathItem *lineItem = new QGraphicsPathItem(myPath);
+            lineItem->setPen(QPen(randomColor,2));
+            networkScene->addItem(lineItem);
+            //            QGraphicsLineItem *lineItem = networkScene->addLine(startPoint.x(), startPoint.y(),
+            //                                                                endPoint.x(), endPoint.y(),
+            //                                                                QPen(randomColor,2));
             QGraphicsEllipseItem *lineEndItem = networkScene->addEllipse(toItem->rect().x() + nodeSize/2. - nodeSize/4.,toItem->rect().y() + nodeSize/2. - nodeSize/4.,
                                                                          nodeSize/2.,nodeSize/2.,QPen(randomColor), QBrush(randomColor));
-            lineItems.append(lineItem);
-            lineEndItems.append(lineEndItem);
         }
     }
 
@@ -105,26 +115,9 @@ void BinaryNetwork1::resetView() {
 }
 
 void BinaryNetwork1::refreshView() {
-    if(doReset) {
-        this->resetView();
-    }
-    if(inputItems.length() != numInputHandlers) {
-        qWarning() << "Wrong number of input items!";
-    }
-    for(int i = 0; i < numInputHandlers; i++) {
-        if(inputNodes.at(i)->state()) {
-            inputItems.at(i)->setPen(QPen(QColor(Qt::green)));
-        } else {
-            inputItems.at(i)->setPen(QPen(QColor(Qt::red)));
-        }
-    }
-    for(int i = 0; i < numOutputs; i++) {
-        if(outputNodes.at(i)->state()) {
-            outputItems.at(i)->setPen(QPen(QColor(Qt::green)));
-        } else {
-            outputItems.at(i)->setPen(QPen(QColor(Qt::red)));
-        }
-    }
+    //    if(doReset) {
+    this->resetView();
+    //    }
 }
 
 void BinaryNetwork1::powerDownNodes() {
@@ -156,11 +149,11 @@ void BinaryNetwork1::advance(double *parameters)
 }
 
 double* BinaryNetwork1::parameters() {
-   double* params = new double[numOutputs];
-   for (int i = 0; i < numOutputs;i++) {
-       params[i] = outputs[i];
-   }
-   return params;
+    double* params = new double[numOutputs];
+    for (int i = 0; i < numOutputs;i++) {
+        params[i] = outputs[i];
+    }
+    return params;
 }
 
 void BinaryNetwork1::revertEvolve() {
@@ -191,7 +184,12 @@ void BinaryNetwork1::Evolve() {
 
 bool BinaryNetwork1::addConnection(int fromIndex, int toIndex) {
 
-    if (fromIndex == toIndex)
+    bool fromIsInput = fromIndex < numInputHandlers;
+    bool toIsInput = toIndex < numInputHandlers;
+    if (fromIndex == toIndex ||
+            (fromIsInput && toIsInput) || // both input
+            (!fromIsInput && !toIsInput) || // both output
+            (!fromIsInput && toIsInput)) // from output to input
         return false;
 
     backUpIndex=fromIndex;

@@ -48,6 +48,8 @@ private:
     QList<QGraphicsItem*> lineItems;
     QList<QGraphicsItem*> lineEndItems;
 
+    int numChangesPerEvolve;
+
     bool doReset;
 };
 

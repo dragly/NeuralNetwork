@@ -10,12 +10,16 @@ Teacher::Teacher(QObject *parent) :
 {
     physicsSimulator = new BalanceSimulator2(this);
 
-    neuralNetwork = new KeyboardInputNetwork();
+    //    neuralNetwork = new KeyboardInputNetwork();
 
-    //BinaryInputHandler** tmp = new BinaryInputHandler*[2];
-    //tmp[0]= new BinaryInputHandler(0,0.5,0.9);
-    //tmp[1]= new BinaryInputHandler(0,0.1,0.5);
-    //neuralNetwork = new BinaryNetwork1(1,2,2,tmp);
+    BinaryInputHandler** tmp = new BinaryInputHandler*[6];
+    tmp[0]= new BinaryInputHandler(0,0.5,0.99);
+    tmp[1]= new BinaryInputHandler(0,0.01,0.5);
+    tmp[2]= new BinaryInputHandler(1,50,100);
+    tmp[3]= new BinaryInputHandler(1,-100,-50);
+    tmp[4]= new BinaryInputHandler(2,20,1000);
+    tmp[5]= new BinaryInputHandler(2,-1000,-20);
+    neuralNetwork = new BinaryNetwork1(3,2,6,tmp);
 
     timer = new QTimer();
     connect(timer, SIGNAL(timeout()), SLOT(advanceVisualization()));
@@ -46,6 +50,7 @@ void Teacher::teach() {
     while (testtime < 0) {
         testtime = step();
     }
+    oldTime = testtime;
 
     if (oldTime>90000) {
         qDebug() << "Time was"<< oldTime;
@@ -98,8 +103,12 @@ void Teacher::setCycles(int _cycles) {
 }
 
 void Teacher::advanceVisualization() {
-
-    int time = step();
+    int i = 0;
+    int time = 0;
+    while(time <= 0 && i < 2) {
+        time = step();
+        i++;
+    }
     physicsSimulator->refreshView();
     neuralNetwork->refreshView();
 
